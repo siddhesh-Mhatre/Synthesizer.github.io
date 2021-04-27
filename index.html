@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+
+    </title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.17/Tone.js" integrity="sha512-EIXtbmVz5SVaJkojf2cSv73z6rh3PKBHOdXVvHEUjHSYrIQd1RaaJnosglDSXuMaRxZr5rk6QdYGm2WcZX/U1Q==" crossorigin="anonymous"></script>
+    <!-- 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/13.4.9/Tone.min.js"></script>  -->
+    <style type="text/css">
+        h1 {
+            text-align: center;
+        }
+        
+        .whitenote {
+            height: 100%;
+            width: 50px;
+            float: left;
+            position: relative;
+            background: white;
+            overflow: visible;
+            border-right: 1px solid black;
+        }
+        
+        .blacknote {
+            position: absolute;
+            height: 65%;
+            width: 55%;
+            left: 68%;
+            z-index: 1;
+            background: #777;
+        }
+        
+        #container {
+            position: absolute;
+            top: 193px;
+            left: calc(50% - 400px);
+            border: 5px solid black;
+            height: 205px;
+        }
+        
+        @media only screen and (max-width:600px) {
+            #container {
+                position: absolute;
+                top: 66px;
+                left: calc(111% - 400px);
+                border: 5px solid black;
+                height: 176px;
+                top: 200px;
+            }
+            .whitenote {
+                height: 100%;
+                width: 23px;
+                float: left;
+                position: relative;
+                background: white;
+                overflow: visible;
+                border-right: 1px solid black;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1>Sythesizer</h1>
+    <div id='container'>
+    </div>
+
+
+    <script type="text/javascript">
+        var synth = new Tone.PolySynth().toMaster();
+        var notes = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+        var html = "";
+
+        for (var octave = 0; octave < 2; octave++) {
+            for (var i = 0; i < notes.length; i++) {
+                var hasSharp = true;
+
+                if (note == 'E' || note == 'B')
+                    hasSharp = false;
+                var note = notes[i];
+                html += `<div class='whitenote' onmousedown='noteDown(this,false)'  onmouseup='noteUp(this,false)' onmouseleave='noteUp(this,false)'  data-note='${note +(octave+4)}'>`;
+
+                if (hasSharp) {
+
+                    // html += `<div class='blacknote' onmousedown='noteDown(this,true)'  onmouseup='noteUp(this,true)' onmouseleave='noteUp(this,true)' data-note='${note +'#4'+(octave+4)}'></div>`;
+                }
+
+                html += '</div>'
+
+            }
+        }
+
+        document.getElementById('container').innerHTML = html;
+
+        function noteUp(elem, isSharp) {
+            elem.style.background = isSharp ? '#777' : 'white';
+        }
+
+        function noteDown(elem, isSharp) {
+            var note = elem.dataset.note;
+            // alert(note);
+            elem.style.background = isSharp ? 'black' : '#ccc';
+            synth.triggerAttackRelease(note, '16n');
+            event.stopPropagation();
+        }
+    </script>
+
+</body>
+
+</html>
